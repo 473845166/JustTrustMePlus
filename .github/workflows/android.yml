@@ -1,0 +1,27 @@
+name: Build and Release APK
+
+on:
+  push:
+    branches:
+      - main  # 触发工作流的分支
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # 检出代码
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2  # 设置 JDK 环境
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug  # 使用 Gradle 构建 Debug 版本的 APK
+        working-directory: app  # 指定工作目录为 app 目录下
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2  # 上传 APK 文件
+        with:
+          name: App APK
+          path: app/build/outputs/apk/debug/app-debug.apk  # APK 文件路径
